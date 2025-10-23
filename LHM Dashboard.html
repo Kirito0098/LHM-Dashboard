@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Часы и LHM</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="animated-background-dark">
+  <header class="topbar">
+    <h1>Панель статуса</h1>
+    <label class="theme-switch" title="Светлая/тёмная тема">
+      <input type="checkbox" id="theme-toggle" />
+    </label>
+  </header>
+
+  <main class="grid">
+    <!-- Блок 1: Время и дата (электронные часы + календарь + погода) -->
+    <section class="panel time-panel neon">
+      <h2>Время и дата</h2>
+      <div class="time-wrap digital-only">
+        <div class="digital">
+          <div class="time" aria-label="Текущее время">
+            <span id="hh">--</span><span class="colon">:</span><span id="mm">--</span><span class="colon">:</span><span id="ss">--</span>
+          </div>
+          <div class="date" aria-live="polite">
+            <span id="dow">—</span>, <span id="day">--</span>.<span id="mon">--</span>.<span id="year">----</span>
+          </div>
+
+          <div class="progress">
+            <div class="bar"><span id="dayProgress" style="width:0%"></span></div>
+            <div class="hint">Прогресс дня: <strong id="dayProgressText">0%</strong></div>
+          </div>
+
+          <!-- Календарь + Погода (две колонки) -->
+          <div class="cal-and-weather">
+            <!-- Календарь -->
+            <div class="calendar" aria-label="Календарь текущего месяца">
+              <div class="cal-title" id="calTitle">—</div>
+              <div class="cal-head">
+                <div>ПН</div><div>ВТ</div><div>СР</div><div>ЧТ</div><div>ПТ</div><div>СБ</div><div>ВС</div>
+              </div>
+              <div class="cal-grid" id="calDays"></div>
+              <div class="today-note" id="todayNote">Сегодня: —</div>
+            </div>
+
+            <!-- Погода справа -->
+            <aside class="weather-card" aria-label="Погода в Москве">
+              <div class="w-header">
+                <span class="w-city">Москва</span>
+                <span class="w-now">
+                  <strong id="wTemp">—°C</strong>
+                  <span id="wDesc">—</span>
+                </span>
+              </div>
+
+              <div class="w-meta">
+                <span>Ощущается: <strong id="wFeels">—°C</strong></span>
+                <span>Ветер: <strong id="wWind">— м/с</strong></span>
+                <span>Мин/Макс (сегодня): <strong id="wMinMax">—/—°C</strong></span>
+              </div>
+
+              <!-- 3-дневный прогноз -->
+              <div class="w-forecast" id="wForecast">
+                <!-- JS вставит 3 карточки -->
+              </div>
+            </aside>
+          </div>
+          <!-- /Календарь + Погода -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Блок 2: Информация из LHM (расширенная) -->
+    <section class="panel metrics-panel">
+      <h2>Система (LibreHardwareMonitor)</h2>
+
+      <!-- CPU -->
+      <div class="group">
+        <div class="group-title">CPU <span id="cpuName" style="opacity:.75;font-weight:400"></span></div>
+
+        <div class="metric">
+          <div class="row">
+            <span class="label"><span class="ico">📊</span> Нагрузка</span>
+            <strong id="cpuLoadVal">—</strong>
+          </div>
+          <div class="bar"><span id="cpuLoadBar" style="width:0%"></span></div>
+        </div>
+
+        <div class="metric">
+          <div class="row">
+            <span class="label"><span class="ico">🔥</span> Температура</span>
+            <strong id="cpuTempVal">—</strong>
+          </div>
+          <div class="bar"><span id="cpuTempBar" style="width:0%"></span></div>
+        </div>
+
+        <div class="metric compact">
+          <div class="row">
+            <span class="label"><span class="ico">⏱️</span> Частота (ср.)</span>
+            <strong id="cpuClockVal">—</strong>
+          </div>
+        </div>
+
+        <div class="metric compact">
+          <div class="row">
+            <span class="label"><span class="ico">⚡</span> Мощность (PKG)</span>
+            <strong id="cpuPowerVal">—</strong>
+          </div>
+        </div>
+
+        <div class="metric compact">
+          <div class="row">
+            <span class="label"><span class="ico">🌀</span> Вентилятор</span>
+            <strong id="cpuFanVal">—</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- GPU -->
+      <div class="group">
+        <div class="group-title">GPU <span id="gpuName" style="opacity:.75;font-weight:400"></span></div>
+
+        <div class="metric">
+          <div class="row">
+            <span class="label"><span class="ico">📊</span> Нагрузка</span>
+            <strong id="gpuLoadVal">—</strong>
+          </div>
+          <div class="bar"><span id="gpuLoadBar" style="width:0%"></span></div>
+        </div>
+
+        <div class="metric">
+          <div class="row">
+            <span class="label"><span class="ico">🔥</span> Температура</span>
+            <strong id="gpuTempVal">—</strong>
+          </div>
+          <div class="bar"><span id="gpuTempBar" style="width:0%"></span></div>
+        </div>
+
+        <div class="metric compact">
+          <div class="row">
+            <span class="label"><span class="ico">⏱️</span> Частота</span>
+            <strong id="gpuClockVal">—</strong>
+          </div>
+        </div>
+
+        <div class="metric compact">
+          <div class="row">
+            <span class="label"><span class="ico">🌀</span> Вентилятор</span>
+            <strong id="gpuFanVal">—</strong>
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="row">
+            <span class="label"><span class="ico">🎮</span> VRAM</span>
+            <strong id="vramVal">—</strong>
+          </div>
+          <div class="bar"><span id="vramBar" style="width:0%"></span></div>
+        </div>
+      </div>
+
+      <!-- RAM -->
+      <div class="group">
+        <div class="group-title">RAM <span id="ramName" style="opacity:.75;font-weight:400"></span></div>
+
+        <div class="metric">
+          <div class="row">
+            <span class="label"><span class="ico">🧠</span> Использование</span>
+            <strong id="ramVal">—</strong>
+          </div>
+          <div class="bar"><span id="ramBar" style="width:0%"></span></div>
+        </div>
+
+        <div class="metric compact">
+          <div class="row">
+            <span class="label">Объём</span>
+            <strong id="ramTextVal">—</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini-hud" id="hud">Ожидание данных LHM…</div>
+    </section>
+  </main>
+
+  <script defer src="script.js"></script>
+</body>
+</html>
